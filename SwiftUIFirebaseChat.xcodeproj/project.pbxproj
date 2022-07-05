@@ -14,6 +14,7 @@
 		9686C29E287337C7001DAC44 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 9686C29D287337C7001DAC44 /* FirebaseAuth */; };
 		9686C2A0287337C7001DAC44 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9686C29F287337C7001DAC44 /* FirebaseStorage */; };
 		9686C2A2287338E3001DAC44 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9686C2A1287338E2001DAC44 /* GoogleService-Info.plist */; };
+		96A944842873AD4600555E66 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A944832873AD4600555E66 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		9686C2922872F764001DAC44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9686C2952872F764001DAC44 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9686C2A1287338E2001DAC44 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		96A944832873AD4600555E66 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 				9686C2A1287338E2001DAC44 /* GoogleService-Info.plist */,
 				9686C2922872F764001DAC44 /* Assets.xcassets */,
 				9686C2942872F764001DAC44 /* Preview Content */,
+				96A944832873AD4600555E66 /* ImagePicker.swift */,
 			);
 			path = SwiftUIFirebaseChat;
 			sourceTree = "<group>";
@@ -152,6 +155,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96A944842873AD4600555E66 /* ImagePicker.swift in Sources */,
 				9686C2912872F762001DAC44 /* LoginView.swift in Sources */,
 				9686C28F2872F762001DAC44 /* SwiftUIFirebaseChatApp.swift in Sources */,
 			);
