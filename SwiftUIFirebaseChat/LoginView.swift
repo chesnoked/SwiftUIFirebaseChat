@@ -10,24 +10,7 @@ import Firebase
 import FirebaseStorage
 import FirebaseFirestore
 
-class FirebaseManager: NSObject {
-    
-    let auth: Auth
-    let storage: Storage
-    let firestore: Firestore
-    
-    static let shared = FirebaseManager()
-    
-    override init() {
-        FirebaseApp.configure()
-        
-        self.auth = Auth.auth()
-        self.storage = Storage.storage()
-        self.firestore = Firestore.firestore()
-        
-        super.init()
-    }
-}
+import SDWebImageSwiftUI
 
 struct LoginView: View {
     
@@ -105,8 +88,7 @@ struct LoginView: View {
                             .frame(maxWidth: .infinity)
                             .background(Color.blue)
                     })
-                    
-                    Text(loginStatusMessage)
+                    Text("\(loginStatusMessage)")
                         .foregroundColor(.red)
                     
                 }
@@ -132,10 +114,11 @@ struct LoginView: View {
             password: password) { result, err in
                 if let err = err {
                     loginStatusMessage = "Failed to login user: \(err)"
-                    //print(loginStatusMessage)
                     return
                 }
                 loginStatusMessage = "Successfully logged in as user: \(result?.user.uid ?? "")"
+                
+                print(loginStatusMessage)
             }
     }
     
@@ -153,21 +136,18 @@ struct LoginView: View {
             password: password) { result, err in
                 if let err = err {
                     loginStatusMessage = "Failed to create user: \(err)"
-                    //print(loginStatusMessage)
                     return
                 }
                 loginStatusMessage = "Successfully created user: \(result?.user.uid ?? "")"
-                //print(loginStatusMessage)
+                
+                print(loginStatusMessage)
                 
                 // Load image to Firebase Storage
                 persistImageToStorage()
             }
-        print(loginStatusMessage)
     }
     
     private func persistImageToStorage() {
-        
-        //let filename = UUID().uuidString
         
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
         let ref = FirebaseManager.shared.storage.reference(withPath: uid)
