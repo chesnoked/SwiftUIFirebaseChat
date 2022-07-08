@@ -1,19 +1,18 @@
 //
 //  MainMessagesView.swift
-//  SwiftUIFirebaseChat
+//  LBTASwiftUIFirebaseChat
 //
-//  Created by Evgeniy Safin on 06.07.2022.
+//  Created by Brian Voong on 11/13/21.
 //
 
 import SwiftUI
 import SDWebImageSwiftUI
 
 class MainMessagesViewModel: ObservableObject {
-
+    
     @Published var errorMessage = ""
     @Published var chatUser: ChatUser?
-    @Published var isUserCurrentlyLoggedOut = false
-
+    
     init() {
         
         DispatchQueue.main.async {
@@ -22,35 +21,37 @@ class MainMessagesViewModel: ObservableObject {
         
         fetchCurrentUser()
     }
-
+    
     func fetchCurrentUser() {
-
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {
             self.errorMessage = "Could not find firebase uid"
             return
         }
-
+        
         FirebaseManager.shared.firestore.collection("users").document(uid).getDocument { snapshot, error in
             if let error = error {
                 self.errorMessage = "Failed to fetch current user: \(error)"
                 print("Failed to fetch current user:", error)
                 return
             }
-
+            
             guard let data = snapshot?.data() else {
                 self.errorMessage = "No data found"
                 return
-
+                
             }
+            
             self.chatUser = .init(data: data)
         }
     }
+    
+    @Published var isUserCurrentlyLoggedOut = false
     
     func handleSignOut() {
         isUserCurrentlyLoggedOut.toggle()
         try? FirebaseManager.shared.auth.signOut()
     }
-
+    
 }
 
 struct MainMessagesView: View {
@@ -61,13 +62,15 @@ struct MainMessagesView: View {
     
     var body: some View {
         NavigationView {
+            
             VStack {
+//                Text("User: \(vm.chatUser?.uid ?? "")")
+                
                 customNavBar
                 messagesView
             }
             .overlay(
-                newMessageButton, alignment: .bottom
-            )
+                newMessageButton, alignment: .bottom)
             .navigationBarHidden(true)
         }
     }
@@ -81,16 +84,17 @@ struct MainMessagesView: View {
                 .frame(width: 50, height: 50)
                 .clipped()
                 .cornerRadius(50)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 44)
-                        .stroke(Color(.label), lineWidth: 1)
+                .overlay(RoundedRectangle(cornerRadius: 44)
+                            .stroke(Color(.label), lineWidth: 1)
                 )
                 .shadow(radius: 5)
             
+            
             VStack(alignment: .leading, spacing: 4) {
-                let email = vm.chatUser?.email.replacingOccurrences(of:"@gmail.com", with: "") ?? ""
+                let email = vm.chatUser?.email.replacingOccurrences(of: "@gmail.com", with: "") ?? ""
                 Text(email)
                     .font(.system(size: 24, weight: .bold))
+                
                 HStack {
                     Circle()
                         .foregroundColor(.green)
@@ -99,28 +103,27 @@ struct MainMessagesView: View {
                         .font(.system(size: 12))
                         .foregroundColor(Color(.lightGray))
                 }
+                
             }
+            
             Spacer()
-            Button(action: {
+            Button {
                 shouldShowLogOutOptions.toggle()
-            }, label: {
+            } label: {
                 Image(systemName: "gear")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(Color(.label))
-            })
+            }
         }
         .padding()
         .actionSheet(isPresented: $shouldShowLogOutOptions) {
-            .init(
-                title: Text("Settings"),
-                message: Text("What do you want to do?"),
-                buttons: [
-                    .destructive(Text("Sign Out"), action: {
-                        print("handle sign out")
-                        vm.handleSignOut()
-                    }),
+            .init(title: Text("Settings"), message: Text("What do you want to do?"), buttons: [
+                .destructive(Text("Sign Out"), action: {
+                    print("handle sign out")
+                    vm.handleSignOut()
+                }),
                     .cancel()
-                ])
+            ])
         }
         .fullScreenCover(isPresented: $vm.isUserCurrentlyLoggedOut, onDismiss: nil) {
             LoginView(didCompleteLoginProcess: {
@@ -132,16 +135,16 @@ struct MainMessagesView: View {
     
     private var messagesView: some View {
         ScrollView {
-            ForEach(0..<10) { num in
+            ForEach(0..<10, id: \.self) { num in
                 VStack {
                     HStack(spacing: 16) {
                         Image(systemName: "person.fill")
                             .font(.system(size: 32))
                             .padding(8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 44)
-                                    .stroke(Color(.label), lineWidth: 1)
+                            .overlay(RoundedRectangle(cornerRadius: 44)
+                                        .stroke(Color(.label), lineWidth: 1)
                             )
+                        
                         
                         VStack(alignment: .leading) {
                             Text("Username")
@@ -157,17 +160,16 @@ struct MainMessagesView: View {
                     }
                     Divider()
                         .padding(.vertical, 8)
-                }
-                .padding(.horizontal)
-            }
+                }.padding(.horizontal)
+                
+            }.padding(.bottom, 50)
         }
-        .padding(.bottom, 50)
     }
     
     private var newMessageButton: some View {
-        Button(action: {
-            //
-        }, label: {
+        Button {
+            
+        } label: {
             HStack {
                 Spacer()
                 Text("+ New Message")
@@ -176,21 +178,19 @@ struct MainMessagesView: View {
             }
             .foregroundColor(.white)
             .padding(.vertical)
-            .background(Color.blue)
-            .cornerRadius(32)
-            .padding(.horizontal)
-            .shadow(radius: 15)
-        })
+                .background(Color.blue)
+                .cornerRadius(32)
+                .padding(.horizontal)
+                .shadow(radius: 15)
+        }
     }
 }
 
 struct MainMessagesView_Previews: PreviewProvider {
     static var previews: some View {
-        
-        MainMessagesView()
-            .preferredColorScheme(.light)
-        
         MainMessagesView()
             .preferredColorScheme(.dark)
+        
+        MainMessagesView()
     }
 }
